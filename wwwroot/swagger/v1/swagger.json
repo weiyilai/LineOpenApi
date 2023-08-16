@@ -1,0 +1,6031 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "LINE Messaging API",
+    "description": "This document describes LINE Messaging API.",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://api.line.me"
+    }
+  ],
+  "paths": {
+    "/v2/bot/channel/webhook/endpoint": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get webhook endpoint information",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-webhook-endpoint-information"
+        },
+        "operationId": "getWebhookEndpoint",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetWebhookEndpointResponse"
+                },
+                "examples": {
+                  "ACTIVE": {
+                    "summary": "If the webhook URL was set and the webhook usage is enabled",
+                    "value": {
+                      "endpoint": "https://example.com/test",
+                      "active": "true"
+                    }
+                  },
+                  "INACTIVE": {
+                    "summary": "If the webhook URL was set and the webhook usage is disabled",
+                    "value": {
+                      "endpoint": "https://example.com/test",
+                      "active": "false"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Set webhook endpoint URL",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#set-webhook-endpoint-url"
+        },
+        "operationId": "setWebhookEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetWebhookEndpointRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/channel/webhook/test": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Test webhook endpoint",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#test-webhook-endpoint"
+        },
+        "operationId": "testWebhookEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TestWebhookEndpointRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TestWebhookEndpointResponse"
+                },
+                "example": {
+                  "success": "true",
+                  "timestamp": "2020-09-30T05:38:20.031Z",
+                  "statusCode": "200",
+                  "reason": "OK",
+                  "detail": "200"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/{messageId}/content": {
+      "get": {
+        "tags": [
+          "messaging-api-blob"
+        ],
+        "description": "Download image, video, and audio data sent from users.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-content"
+        },
+        "operationId": "getMessageContent",
+        "parameters": [
+          {
+            "name": "messageId",
+            "in": "path",
+            "required": true,
+            "description": "Message ID of video or audio",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "description": "blob response",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api-data.line.me"
+          }
+        ]
+      }
+    },
+    "/v2/bot/message/{messageId}/content/preview": {
+      "get": {
+        "tags": [
+          "messaging-api-blob"
+        ],
+        "description": "Get a preview image of the image or video",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-image-or-video-preview"
+        },
+        "operationId": "getMessageContentPreview",
+        "parameters": [
+          {
+            "name": "messageId",
+            "in": "path",
+            "required": true,
+            "description": "Message ID of image or video",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "description": "blob response",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api-data.line.me"
+          }
+        ]
+      }
+    },
+    "/v2/bot/message/{messageId}/content/transcoding": {
+      "get": {
+        "tags": [
+          "messaging-api-blob"
+        ],
+        "description": "Verify the preparation status of a video or audio for getting",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#verify-video-or-audio-preparation-status"
+        },
+        "operationId": "getMessageContentTranscodingByMessageId",
+        "parameters": [
+          {
+            "name": "messageId",
+            "in": "path",
+            "required": true,
+            "description": "Message ID of video or audio",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetMessageContentTranscodingResponse"
+                },
+                "example": {
+                  "status": "processing"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api-data.line.me"
+          }
+        ]
+      }
+    },
+    "/v2/bot/message/reply": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Send reply message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-reply-message"
+        },
+        "operationId": "replyMessage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReplyMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/push": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Sends a message to a user, group chat, or multi-person chat at any time.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-push-message"
+        },
+        "operationId": "pushMessage",
+        "parameters": [
+          {
+            "name": "X-Line-Retry-Key",
+            "in": "header",
+            "description": "Retry key.\nSpecifies the UUID in hexadecimal format (e.g., `123e4567-e89b-12d3-a456-426614174000`) generated by any method.\nThe retry key isn't generated by LINE. Each developer must generate their own retry key.\n",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PushMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/multicast": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "An API that efficiently sends the same message to multiple user IDs. You can't send messages to group chats or multi-person chats.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-multicast-message"
+        },
+        "operationId": "multicast",
+        "parameters": [
+          {
+            "name": "X-Line-Retry-Key",
+            "in": "header",
+            "description": "Retry key.\nSpecifies the UUID in hexadecimal format (e.g., `123e4567-e89b-12d3-a456-426614174000`) generated by any method.\nThe retry key isn't generated by LINE. Each developer must generate their own retry key.\n",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MulticastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/narrowcast": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Send narrowcast message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-narrowcast-message"
+        },
+        "operationId": "narrowcast",
+        "parameters": [
+          {
+            "name": "X-Line-Retry-Key",
+            "in": "header",
+            "description": "Retry key.\nSpecifies the UUID in hexadecimal format (e.g., `123e4567-e89b-12d3-a456-426614174000`) generated by any method.\nThe retry key isn't generated by LINE. Each developer must generate their own retry key.\n",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NarrowcastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/progress/narrowcast": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Gets the status of a narrowcast message.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-narrowcast-progress-status"
+        },
+        "operationId": "getNarrowcastProgress",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "query",
+            "required": true,
+            "description": "The narrowcast message's request ID. Each Messaging API request has a request ID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NarrowcastProgressResponse"
+                },
+                "example": {
+                  "phase": "waiting",
+                  "acceptedTime": "2020-12-03T10:15:30.121Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/broadcast": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Sends a message to multiple users at any time.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-broadcast-message"
+        },
+        "operationId": "broadcast",
+        "parameters": [
+          {
+            "name": "X-Line-Retry-Key",
+            "in": "header",
+            "description": "Retry key.\nSpecifies the UUID in hexadecimal format (e.g., `123e4567-e89b-12d3-a456-426614174000`) generated by any method.\nThe retry key isn't generated by LINE. Each developer must generate their own retry key.\n",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BroadcastRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/quota": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Gets the target limit for sending messages in the current month. The total number of the free messages and the additional messages is returned.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-quota"
+        },
+        "operationId": "getMessageQuota",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageQuotaResponse"
+                },
+                "example": {
+                  "type": "limited",
+                  "value": "1000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/quota/consumption": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Gets the number of messages sent in the current month.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-consumption"
+        },
+        "operationId": "getMessageQuotaConsumption",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuotaConsumptionResponse"
+                },
+                "example": {
+                  "totalUsage": "500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/delivery/reply": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of sent reply messages",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-number-of-reply-messages"
+        },
+        "operationId": "getNumberOfSentReplyMessages",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date the messages were sent\n\nFormat: `yyyyMMdd` (e.g. `20191231`)\nTimezone: UTC+9\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NumberOfMessagesResponse"
+                },
+                "example": {
+                  "status": "ready",
+                  "success": "10000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/delivery/push": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of sent push messages",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-number-of-push-messages"
+        },
+        "operationId": "getNumberOfSentPushMessages",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date the messages were sent\n\nFormat: `yyyyMMdd` (e.g. `20191231`)\nTimezone: UTC+9\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NumberOfMessagesResponse"
+                },
+                "example": {
+                  "status": "ready",
+                  "success": "10000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/delivery/multicast": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of sent multicast messages",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-number-of-multicast-messages"
+        },
+        "operationId": "getNumberOfSentMulticastMessages",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date the messages were sent\n\nFormat: `yyyyMMdd` (e.g. `20191231`)\nTimezone: UTC+9\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NumberOfMessagesResponse"
+                },
+                "example": {
+                  "status": "ready",
+                  "success": "10000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/delivery/broadcast": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of sent broadcast messages",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-number-of-broadcast-messages"
+        },
+        "operationId": "getNumberOfSentBroadcastMessages",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date the messages were sent\n\nFormat: yyyyMMdd (e.g. 20191231)\nTimezone: UTC+9\n",
+            "schema": {
+              "type": "string",
+              "format": "^[0-9]{8}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NumberOfMessagesResponse"
+                },
+                "example": {
+                  "status": "ready",
+                  "success": "10000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/validate/reply": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Validate message objects of a reply message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#validate-message-objects-of-reply-message"
+        },
+        "operationId": "validateReply",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/message/validate/push": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Validate message objects of a push message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#validate-message-objects-of-push-message"
+        },
+        "operationId": "validatePush",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/message/validate/multicast": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Validate message objects of a multicast message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#validate-message-objects-of-multicast-message"
+        },
+        "operationId": "validateMulticast",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/message/validate/narrowcast": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Validate message objects of a narrowcast message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#validate-message-objects-of-narrowcast-message"
+        },
+        "operationId": "validateNarrowcast",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/message/validate/broadcast": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Validate message objects of a broadcast message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#validate-message-objects-of-broadcast-message"
+        },
+        "operationId": "validateBroadcast",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateMessageRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/message/aggregation/info": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of units used this month",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-number-of-units-used-this-month"
+        },
+        "operationId": "getAggregationUnitUsage",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAggregationUnitUsageResponse"
+                },
+                "example": {
+                  "numOfCustomAggregationUnits": "22"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/aggregation/list": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get name list of units used this month",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-name-list-of-units-used-this-month"
+        },
+        "operationId": "getAggregationUnitNameList",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of aggregation units you can get per request.\n",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Value of the continuation token found in the next property of the JSON object returned in the response.\nIf you can't get all the aggregation units in one request, include this parameter to get the remaining array.\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAggregationUnitNameListResponse"
+                },
+                "example": {
+                  "customAggregationUnits": [
+                    "promotion_a",
+                    "promotion_b"
+                  ],
+                  "next": "jxEWCEEP..."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/profile/{userId}": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get profile",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-profile"
+        },
+        "operationId": "getProfile",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserProfileResponse"
+                },
+                "example": {
+                  "displayName": "LINE taro",
+                  "userId": "U4af4980629...",
+                  "language": "en",
+                  "pictureUrl": "https://obs.line-apps.com/...",
+                  "statusMessage": "Hello, LINE!"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/followers/ids": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get a list of users who added your LINE Official Account as a friend",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-follower-ids"
+        },
+        "operationId": "getFollowers",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Value of the continuation token found in the next property of the JSON object returned in the response.\nInclude this parameter to get the next array of user IDs.\n",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The maximum number of user IDs to retrieve in a single request.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": "300",
+              "maximum": 1000.0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFollowersResponse"
+                },
+                "example": {
+                  "userIds": [
+                    "U4af4980629...",
+                    "U0c229f96c4...",
+                    "U95afb1d4df..."
+                  ],
+                  "next": "yANU9IA..."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/info": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get bot info",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-bot-info"
+        },
+        "operationId": "getBotInfo",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BotInfoResponse"
+                },
+                "example": {
+                  "userId": "Ub9952f8...",
+                  "basicId": "@216ru...",
+                  "displayName": "Example name",
+                  "pictureUrl": "https://obs.line-apps.com/...",
+                  "chatMode": "chat",
+                  "markAsReadMode": "manual"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/group/{groupId}/member/{userId}": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get group chat member profile",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-group-member-profile"
+        },
+        "operationId": "getGroupMemberProfile",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "Group ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupUserProfileResponse"
+                },
+                "example": {
+                  "displayName": "LINE taro",
+                  "userId": "U4af4980629...",
+                  "pictureUrl": "https://obs.line-apps.com/..."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/room/{roomId}/member/{userId}": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get multi-person chat member profile",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-room-member-profile"
+        },
+        "operationId": "getRoomMemberProfile",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "description": "Room ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "User ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomUserProfileResponse"
+                },
+                "example": {
+                  "displayName": "LINE taro",
+                  "userId": "U4af4980629...",
+                  "pictureUrl": "https://obs.line-apps.com/..."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/group/{groupId}/members/ids": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get group chat member user IDs",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-group-member-user-ids"
+        },
+        "operationId": "getGroupMembersIds",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "Group ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Value of the continuation token found in the `next` property of the JSON object returned in the response.\nInclude this parameter to get the next array of user IDs for the members of the group.\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MembersIdsResponse"
+                },
+                "example": {
+                  "memberIds": [
+                    "U4af4980629...",
+                    "U0c229f96c4...",
+                    "U95afb1d4df..."
+                  ],
+                  "next": "jxEWCEEP..."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/room/{roomId}/members/ids": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get multi-person chat member user IDs",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-room-member-user-ids"
+        },
+        "operationId": "getRoomMembersIds",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "description": "Room ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "description": "Value of the continuation token found in the `next` property of the JSON object returned in the response.\nInclude this parameter to get the next array of user IDs for the members of the group.\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MembersIdsResponse"
+                },
+                "example": {
+                  "memberIds": [
+                    "U4af4980629...",
+                    "U0c229f96c4...",
+                    "U95afb1d4df..."
+                  ],
+                  "next": "jxEWCEEP..."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/group/{groupId}/leave": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Leave group chat",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#leave-group"
+        },
+        "operationId": "leaveGroup",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "Group ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/room/{roomId}/leave": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Leave multi-person chat",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#leave-room"
+        },
+        "operationId": "leaveRoom",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "description": "Room ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/group/{groupId}/summary": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get group chat summary",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-group-summary"
+        },
+        "operationId": "getGroupSummary",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "Group ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupSummaryResponse"
+                },
+                "example": {
+                  "groupId": "Ca56f94637c...",
+                  "groupName": "Group name",
+                  "pictureUrl": "https://profile.line-scdn.net/abcdefghijklmn"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/group/{groupId}/members/count": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of users in a group chat",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-members-group-count"
+        },
+        "operationId": "getGroupMemberCount",
+        "parameters": [
+          {
+            "name": "groupId",
+            "in": "path",
+            "required": true,
+            "description": "Group ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GroupMemberCountResponse"
+                },
+                "example": {
+                  "count": "3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/room/{roomId}/members/count": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of users in a multi-person chat",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-members-room-count"
+        },
+        "operationId": "getRoomMemberCount",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "description": "Room ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoomMemberCountResponse"
+                },
+                "example": {
+                  "count": "3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Create rich menu",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#create-rich-menu"
+        },
+        "operationId": "createRichMenu",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RichMenuRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuIdResponse"
+                },
+                "example": {
+                  "richMenuId": "{richMenuId}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/validate": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Validate rich menu object",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#validate-rich-menu-object"
+        },
+        "operationId": "validateRichMenuObject",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RichMenuRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/{richMenuId}/content": {
+      "get": {
+        "tags": [
+          "messaging-api-blob"
+        ],
+        "description": "Download rich menu image.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#download-rich-menu-image"
+        },
+        "operationId": "getRichMenuImage",
+        "parameters": [
+          {
+            "name": "richMenuId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the rich menu with the image to be downloaded",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string",
+                  "description": "blob response",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api-data.line.me"
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "messaging-api-blob"
+        ],
+        "description": "Upload rich menu image",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#upload-rich-menu-image"
+        },
+        "operationId": "setRichMenuImage",
+        "parameters": [
+          {
+            "name": "richMenuId",
+            "in": "path",
+            "required": true,
+            "description": "The ID of the rich menu to attach the image to",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "*/*": {
+              "schema": {
+                "type": "string",
+                "description": "blob request",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "servers": [
+          {
+            "url": "https://api-data.line.me"
+          }
+        ]
+      }
+    },
+    "/v2/bot/richmenu/{richMenuId}": {
+      "parameters": [
+        {
+          "name": "richMenuId",
+          "in": "path",
+          "required": true,
+          "description": "ID of a rich menu",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Gets a rich menu via a rich menu ID.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-rich-menu"
+        },
+        "operationId": "getRichMenu",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuResponse"
+                },
+                "example": {
+                  "richMenuId": "{richMenuId}",
+                  "size": {
+                    "width": "2500",
+                    "height": "1686"
+                  },
+                  "name": "nice rich menu",
+                  "chatBarText": "click",
+                  "selected": "false",
+                  "areas": [
+                    {
+                      "bounds": {
+                        "x": "0",
+                        "y": "0",
+                        "width": "2500",
+                        "height": "1686"
+                      },
+                      "action": {
+                        "type": "postback",
+                        "data": "action=buy&itemid=123"
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Deletes a rich menu.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#delete-rich-menu"
+        },
+        "operationId": "deleteRichMenu",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/list": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get rich menu list",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-rich-menu-list"
+        },
+        "operationId": "getRichMenuList",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuListResponse"
+                },
+                "example": {
+                  "richmenus": [
+                    {
+                      "richMenuId": "{richMenuId}",
+                      "size": {
+                        "width": "2500",
+                        "height": "1686"
+                      },
+                      "selected": "false",
+                      "name": "nice rich menu",
+                      "chatBarText": "click",
+                      "areas": [
+                        {
+                          "bounds": {
+                            "x": "0",
+                            "y": "0",
+                            "width": "2500",
+                            "height": "1686"
+                          },
+                          "action": {
+                            "type": "postback",
+                            "data": "action=buy&itemid=123"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/user/all/richmenu/{richMenuId}": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Set default rich menu",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#set-default-rich-menu"
+        },
+        "operationId": "setDefaultRichMenu",
+        "parameters": [
+          {
+            "name": "richMenuId",
+            "in": "path",
+            "required": true,
+            "description": "ID of a rich menu",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/user/all/richmenu": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Gets the ID of the default rich menu set with the Messaging API.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-default-rich-menu-id"
+        },
+        "operationId": "getDefaultRichMenuId",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuIdResponse"
+                },
+                "example": {
+                  "richMenuId": "{richMenuId}"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Cancel default rich menu",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#cancel-default-rich-menu"
+        },
+        "operationId": "cancelDefaultRichMenu",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/alias": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Create rich menu alias",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#create-rich-menu-alias"
+        },
+        "operationId": "createRichMenuAlias",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRichMenuAliasRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/alias/{richMenuAliasId}": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get rich menu alias information",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-rich-menu-alias-by-id"
+        },
+        "operationId": "getRichMenuAlias",
+        "parameters": [
+          {
+            "name": "richMenuAliasId",
+            "in": "path",
+            "required": true,
+            "description": "The rich menu alias ID whose information you want to obtain.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuAliasResponse"
+                },
+                "example": {
+                  "richMenuAliasId": "richmenu-alias-a",
+                  "richMenuId": "richmenu-88c05ef6921ae53f8b58a25f3a65faf7"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Update rich menu alias",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#update-rich-menu-alias"
+        },
+        "operationId": "updateRichMenuAlias",
+        "parameters": [
+          {
+            "name": "richMenuAliasId",
+            "in": "path",
+            "required": true,
+            "description": "The rich menu alias ID you want to update.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRichMenuAliasRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Delete rich menu alias",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#delete-rich-menu-alias"
+        },
+        "operationId": "deleteRichMenuAlias",
+        "parameters": [
+          {
+            "name": "richMenuAliasId",
+            "in": "path",
+            "required": true,
+            "description": "Rich menu alias ID that you want to delete.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/alias/list": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get list of rich menu alias",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-rich-menu-alias-list"
+        },
+        "operationId": "getRichMenuAliasList",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuAliasListResponse"
+                },
+                "examples": {
+                  "TWO_ALIASES": {
+                    "summary": "If you have 2 rich menu aliases",
+                    "value": {
+                      "aliases": [
+                        {
+                          "richMenuAliasId": "richmenu-alias-a",
+                          "richMenuId": "richmenu-862e6ad6c267d2ddf3f42bc78554f6a4"
+                        },
+                        {
+                          "richMenuAliasId": "richmenu-alias-b",
+                          "richMenuId": "richmenu-88c05ef6921ae53f8b58a25f3a65faf7"
+                        }
+                      ]
+                    }
+                  },
+                  "NO_ALIASES": {
+                    "summary": "If you have 0 rich menu alias",
+                    "value": {
+                      "aliases": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/user/{userId}/richmenu": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "description": "User ID. Found in the `source` object of webhook event objects. Do not use the LINE ID used in LINE.",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get rich menu ID of user",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-rich-menu-id-of-user"
+        },
+        "operationId": "getRichMenuIdOfUser",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuIdResponse"
+                },
+                "example": {
+                  "richMenuId": "{richMenuId}"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Unlink rich menu from user",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#unlink-rich-menu-from-user"
+        },
+        "operationId": "unlinkRichMenuIdFromUser",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/user/{userId}/richmenu/{richMenuId}": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Link rich menu to user.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#link-rich-menu-to-user"
+        },
+        "operationId": "linkRichMenuIdToUser",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "User ID. Found in the `source` object of webhook event objects. Do not use the LINE ID used in LINE.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "richMenuId",
+            "in": "path",
+            "required": true,
+            "description": "ID of a rich menu",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/bulk/link": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Link rich menu to multiple users",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#link-rich-menu-to-users"
+        },
+        "operationId": "linkRichMenuIdToUsers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RichMenuBulkLinkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/bulk/unlink": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Unlink rich menus from multiple users",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#unlink-rich-menu-from-users"
+        },
+        "operationId": "unlinkRichMenuIdFromUsers",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RichMenuBulkUnlinkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/batch": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "You can use this endpoint to batch control the rich menu linked to the users using the endpoint such as Link rich menu to user. \nThe following operations are available:\n\n1. Replace a rich menu with another rich menu for all users linked to a specific rich menu\n2. Unlink a rich menu for all users linked to a specific rich menu\n3. Unlink a rich menu for all users linked the rich menu\n",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#batch-control-rich-menus-of-users"
+        },
+        "operationId": "richMenuBatch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RichMenuBatchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/validate/batch": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Validate a request body of the Replace or unlink the linked rich menus in batches endpoint.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#validate-batch-control-rich-menus-request"
+        },
+        "operationId": "validateRichMenuBatchRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RichMenuBatchRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/richmenu/progress/batch": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get the status of Replace or unlink a linked rich menus in batches.",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-batch-control-rich-menus-progress-status"
+        },
+        "operationId": "getRichMenuBatchProgress",
+        "parameters": [
+          {
+            "name": "requestId",
+            "in": "query",
+            "required": true,
+            "description": "A request ID used to batch control the rich menu linked to the user. Each Messaging API request has a request ID.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RichMenuBatchProgressResponse"
+                },
+                "example": {
+                  "phase": "ongoing",
+                  "acceptedTime": "2023-07-04T10:15:30.121Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/user/{userId}/linkToken": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Issue link token",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#issue-link-token"
+        },
+        "operationId": "issueLinkToken",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "description": "User ID for the LINE account to be linked.\nFound in the `source` object of account link event objects. Do not use the LINE ID used in LINE.\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueLinkTokenResponse"
+                },
+                "example": {
+                  "linkToken": "NMZTNuVrPTqlr2IF8Bnymkb7rXfYv5EY"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/markAsRead": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Mark messages from users as read",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#mark-messages-from-users-as-read"
+        },
+        "operationId": "markMessagesAsRead",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MarkMessagesAsReadRequest"
+              },
+              "example": {
+                "chat": {
+                  "userId": "Uxxxxxxxxxxxxxxxxxx"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/bot/pnp/push": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Send LINE notification message",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#send-line-notification-message"
+        },
+        "operationId": "pushMessagesByPhone",
+        "parameters": [
+          {
+            "name": "X-Line-Delivery-Tag",
+            "in": "header",
+            "description": "String returned in the delivery.data property of the delivery completion event via Webhook.",
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "minLength": 16
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PnpMessagesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bot/ad/multicast/phone": {
+      "post": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Send a message using phone number",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#phone-audience-match"
+        },
+        "operationId": "audienceMatch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AudienceMatchMessagesRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v2/bot/message/delivery/pnp": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get number of sent LINE notification messages　",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#get-number-of-sent-line-notification-messages"
+        },
+        "operationId": "getPNPMessageStatistics",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date the message was sent\n\nFormat: `yyyyMMdd` (Example:`20211231`)\nTime zone: UTC+9\n",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]{8}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NumberOfMessagesResponse"
+                },
+                "example": {
+                  "status": "ready",
+                  "success": "3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/bot/message/delivery/ad_phone": {
+      "get": {
+        "tags": [
+          "messaging-api"
+        ],
+        "description": "Get result of message delivery using phone number",
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#get-phone-audience-match"
+        },
+        "operationId": "getAdPhoneMessageStatistics",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Date the message was sent\n\nFormat: `yyyyMMdd` (e.g. `20190831`)\nTime Zone: UTC+9\n",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NumberOfMessagesResponse"
+                },
+                "examples": {
+                  "READY": {
+                    "summary": "Example of response when status is `ready`",
+                    "value": {
+                      "status": "ready",
+                      "success": "10000"
+                    }
+                  },
+                  "UNAVAILABLE_FOR_PRIVACY": {
+                    "summary": "Example response when status is `unavailable_for_privacy`",
+                    "value": {
+                      "status": "unavailable_for_privacy"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GetWebhookEndpointResponse": {
+        "type": "object",
+        "required": [
+          "endpoint",
+          "active"
+        ],
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "description": "Webhook URL",
+            "format": "uri"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Webhook usage status. Send a webhook event from the LINE Platform to the webhook URL only if enabled.\n\n`true`: Webhook usage is enabled.\n`false`: Webhook usage is disabled.\n"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-webhook-endpoint-information"
+        }
+      },
+      "SetWebhookEndpointRequest": {
+        "type": "object",
+        "required": [
+          "endpoint"
+        ],
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "description": "A valid webhook URL.",
+            "format": "uri",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#set-webhook-endpoint-url"
+        }
+      },
+      "TestWebhookEndpointRequest": {
+        "type": "object",
+        "properties": {
+          "endpoint": {
+            "type": "string",
+            "description": "A webhook URL to be validated.",
+            "format": "uri",
+            "maxLength": 500,
+            "minLength": 0
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#test-webhook-endpoint"
+        }
+      },
+      "TestWebhookEndpointResponse": {
+        "type": "object",
+        "required": [
+          "statusCode",
+          "timestamp",
+          "reason",
+          "detail"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Result of the communication from the LINE platform to the webhook URL."
+          },
+          "timestamp": {
+            "type": "string",
+            "description": "Time of the event in milliseconds. Even in the case of a redelivered webhook, it represents the time the event occurred, not the time it was redelivered.\n",
+            "format": "date-time"
+          },
+          "statusCode": {
+            "type": "integer",
+            "description": "The HTTP status code. If the webhook response isn't received, the status code is set to zero or a negative number.",
+            "format": "int32"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Reason for the response."
+          },
+          "detail": {
+            "type": "string",
+            "description": "Details of the response."
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#test-webhook-endpoint"
+        }
+      },
+      "GetMessageContentTranscodingResponse": {
+        "type": "object",
+        "description": "Transcoding response",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "The preparation status. One of:\n\n`processing`: Preparing to get content.\n`succeeded`: Ready to get the content. You can get the content sent by users.\n`failed`: Failed to prepare to get the content.\n",
+            "enum": [
+              "processing",
+              "succeeded",
+              "failed"
+            ]
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#verify-video-or-audio-preparation-status"
+        }
+      },
+      "ReplyMessageRequest": {
+        "type": "object",
+        "required": [
+          "messages",
+          "replyToken"
+        ],
+        "properties": {
+          "replyToken": {
+            "type": "string",
+            "description": "replyToken received via webhook."
+          },
+          "messages": {
+            "type": "array",
+            "description": "List of messages.",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "notificationDisabled": {
+            "$ref": "#/components/schemas/NotificationDisabled"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-reply-message"
+        }
+      },
+      "PushMessageRequest": {
+        "type": "object",
+        "required": [
+          "messages",
+          "to"
+        ],
+        "properties": {
+          "to": {
+            "type": "string",
+            "description": "ID of the receiver."
+          },
+          "messages": {
+            "type": "array",
+            "description": "List of Message objects.",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "notificationDisabled": {
+            "$ref": "#/components/schemas/NotificationDisabled"
+          },
+          "customAggregationUnits": {
+            "type": "array",
+            "description": "List of aggregation unit name. Case-sensitive.\nThis functions can only be used by corporate users who have submitted the required applications.\n",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-push-message"
+        }
+      },
+      "NotificationDisabled": {
+        "type": "boolean",
+        "description": "`true`: The user doesn’t receive a push notification when a message is sent.\n`false`: The user receives a push notification when the message is sent (unless they have disabled push notifications in LINE and/or their device).\nThe default value is false.\n",
+        "default": "false"
+      },
+      "MulticastRequest": {
+        "type": "object",
+        "required": [
+          "messages",
+          "to"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "Messages to send",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "to": {
+            "type": "array",
+            "description": "Array of user IDs. Use userId values which are returned in webhook event objects. Do not use LINE IDs found on LINE.",
+            "maxItems": 500,
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "notificationDisabled": {
+            "$ref": "#/components/schemas/NotificationDisabled"
+          },
+          "customAggregationUnits": {
+            "type": "array",
+            "description": "Name of aggregation unit. Case-sensitive.",
+            "maxItems": 1,
+            "items": {
+              "type": "string",
+              "maxLength": 30,
+              "minLength": 1,
+              "pattern": "^[a-zA-Z0-9_]{1,30}$"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-multicast-message"
+        }
+      },
+      "NarrowcastRequest": {
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "List of Message objects.",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "recipient": {
+            "$ref": "#/components/schemas/Recipient"
+          },
+          "filter": {
+            "$ref": "#/components/schemas/Filter"
+          },
+          "limit": {
+            "$ref": "#/components/schemas/Limit"
+          },
+          "notificationDisabled": {
+            "$ref": "#/components/schemas/NotificationDisabled"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-narrowcast-message"
+        }
+      },
+      "Recipient": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "operator": "#/components/schemas/OperatorRecipient",
+            "audience": "#/components/schemas/AudienceRecipient",
+            "redelivery": "#/components/schemas/RedeliveryRecipient"
+          }
+        },
+        "description": "Recipient",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of recipient"
+          }
+        }
+      },
+      "OperatorRecipient": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Recipient"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "and": {
+                "type": "array",
+                "description": "Create a new recipient object by taking the logical conjunction (AND) of the specified array of recipient objects.\n",
+                "items": {
+                  "$ref": "#/components/schemas/Recipient"
+                }
+              },
+              "or": {
+                "type": "array",
+                "description": "Create a new recipient object by taking the logical disjunction (OR) of the specified array of recipient objects.\n",
+                "items": {
+                  "$ref": "#/components/schemas/Recipient"
+                }
+              },
+              "not": {
+                "$ref": "#/components/schemas/Recipient"
+              }
+            }
+          }
+        ]
+      },
+      "AudienceRecipient": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Recipient"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "audienceGroupId": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ]
+      },
+      "RedeliveryRecipient": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Recipient"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "requestId": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Filter": {
+        "type": "object",
+        "description": "Filter for narrowcast",
+        "properties": {
+          "demographic": {
+            "$ref": "#/components/schemas/DemographicFilter"
+          }
+        }
+      },
+      "DemographicFilter": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "age": "#/components/schemas/AgeDemographicFilter",
+            "appType": "#/components/schemas/AppTypeDemographicFilter",
+            "area": "#/components/schemas/AreaDemographicFilter",
+            "gender": "#/components/schemas/GenderDemographicFilter",
+            "operator": "#/components/schemas/OperatorDemographicFilter",
+            "subscriptionPeriod": "#/components/schemas/SubscriptionPeriodDemographicFilter"
+          }
+        },
+        "description": "Demographic filter",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of demographic filter"
+          }
+        }
+      },
+      "AgeDemographicFilter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DemographicFilter"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "gte": {
+                "$ref": "#/components/schemas/AgeDemographic"
+              },
+              "lt": {
+                "$ref": "#/components/schemas/AgeDemographic"
+              }
+            }
+          }
+        ]
+      },
+      "AgeDemographic": {
+        "type": "string",
+        "enum": [
+          "age_15",
+          "age_20",
+          "age_25",
+          "age_30",
+          "age_35",
+          "age_40",
+          "age_45",
+          "age_50"
+        ]
+      },
+      "AppTypeDemographicFilter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DemographicFilter"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "oneOf": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AppTypeDemographic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AppTypeDemographic": {
+        "type": "string",
+        "enum": [
+          "ios",
+          "android"
+        ]
+      },
+      "AreaDemographicFilter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DemographicFilter"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "oneOf": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/AreaDemographic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "AreaDemographic": {
+        "type": "string",
+        "enum": [
+          "jp_01",
+          "jp_02",
+          "jp_03",
+          "jp_04",
+          "jp_05",
+          "jp_06",
+          "jp_07",
+          "jp_08",
+          "jp_09",
+          "jp_10",
+          "jp_11",
+          "jp_12",
+          "jp_13",
+          "jp_14",
+          "jp_15",
+          "jp_16",
+          "jp_17",
+          "jp_18",
+          "jp_19",
+          "jp_20",
+          "jp_21",
+          "jp_22",
+          "jp_23",
+          "jp_24",
+          "jp_25",
+          "jp_26",
+          "jp_27",
+          "jp_28",
+          "jp_29",
+          "jp_30",
+          "jp_31",
+          "jp_32",
+          "jp_33",
+          "jp_34",
+          "jp_35",
+          "jp_36",
+          "jp_37",
+          "jp_38",
+          "jp_39",
+          "jp_40",
+          "jp_41",
+          "jp_42",
+          "jp_43",
+          "jp_44",
+          "jp_45",
+          "jp_46",
+          "jp_47",
+          "tw_01",
+          "tw_02",
+          "tw_03",
+          "tw_04",
+          "tw_05",
+          "tw_06",
+          "tw_07",
+          "tw_08",
+          "tw_09",
+          "tw_10",
+          "tw_11",
+          "tw_12",
+          "tw_13",
+          "tw_14",
+          "tw_15",
+          "tw_16",
+          "tw_17",
+          "tw_18",
+          "tw_19",
+          "tw_20",
+          "tw_21",
+          "tw_22",
+          "th_01",
+          "th_02",
+          "th_03",
+          "th_04",
+          "th_05",
+          "th_06",
+          "th_07",
+          "th_08",
+          "id_01",
+          "id_02",
+          "id_03",
+          "id_04",
+          "id_05",
+          "id_06",
+          "id_07",
+          "id_08",
+          "id_09",
+          "id_10",
+          "id_11",
+          "id_12"
+        ],
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-narrowcast-message"
+        },
+        "x-enum-varnames": [
+          "HOKKAIDO",
+          "AOMORI",
+          "IWATE",
+          "MIYAGI",
+          "AKITA",
+          "YAMAGATA",
+          "FUKUSHIMA",
+          "IBARAKI",
+          "TOCHIGI",
+          "GUNMA",
+          "SAITAMA",
+          "CHIBA",
+          "TOKYO",
+          "KANAGAWA",
+          "NIIGATA",
+          "TOYAMA",
+          "ISHIKAWA",
+          "FUKUI",
+          "YAMANASHI",
+          "NAGANO",
+          "GIFU",
+          "SHIZUOKA",
+          "AICHI",
+          "MIE",
+          "SHIGA",
+          "KYOTO",
+          "OSAKA",
+          "HYOUGO",
+          "NARA",
+          "WAKAYAMA",
+          "TOTTORI",
+          "SHIMANE",
+          "OKAYAMA",
+          "HIROSHIMA",
+          "YAMAGUCHI",
+          "TOKUSHIMA",
+          "KAGAWA",
+          "EHIME",
+          "KOUCHI",
+          "FUKUOKA",
+          "SAGA",
+          "NAGASAKI",
+          "KUMAMOTO",
+          "OITA",
+          "MIYAZAKI",
+          "KAGOSHIMA",
+          "OKINAWA",
+          "TAIPEI_CITY",
+          "NEW_TAIPEI_CITY",
+          "TAOYUAN_CITY",
+          "TAICHUNG_CITY",
+          "TAINAN_CITY",
+          "KAOHSIUNG_CITY",
+          "KEELUNG_CITY",
+          "HSINCHU_CITY",
+          "CHIAYI_CITY",
+          "HSINCHU_COUNTY",
+          "MIAOLI_COUNTY",
+          "CHANGHUA_COUNTY",
+          "NANTOU_COUNTY",
+          "YUNLIN_COUNTY",
+          "CHIAYI_COUNTY",
+          "PINGTUNG_COUNTY",
+          "YILAN_COUNTY",
+          "HUALIEN_COUNTY",
+          "TAITUNG_COUNTY",
+          "PENGHU_COUNTY",
+          "KINMEN_COUNTY",
+          "LIENCHIANG_COUNTY",
+          "BANGKOK",
+          "PATTAYA",
+          "NORTHERN",
+          "CENTRAL",
+          "SOUTHERN",
+          "EASTERN",
+          "NORTHEASTERN",
+          "WESTERN",
+          "BALI",
+          "BANDUNG",
+          "BANJARMASIN",
+          "JABODETABEK",
+          "MAKASSAR",
+          "MEDAN",
+          "PALEMBANG",
+          "SAMARINDA",
+          "SEMARANG",
+          "SURABAYA",
+          "YOGYAKARTA",
+          "LAINNYA"
+        ],
+        "x-enum-descriptions": [
+          "jp_01: 北海道 // Hokkaido",
+          "jp_02: 青森県 // Aomori",
+          "jp_03: 岩手県 // Iwate",
+          "jp_04: 宮城県 // Miyagi",
+          "jp_05: 秋田県 // Akita",
+          "jp_06: 山形県 // Yamagata",
+          "jp_07: 福島県 // Fukushima",
+          "jp_08: 茨城県 // Ibaraki",
+          "jp_09: 栃木県 // Tochigi",
+          "jp_10: 群馬県 // Gunma",
+          "jp_11: 埼玉県 // Saitama",
+          "jp_12: 千葉県 // Chiba",
+          "jp_13: 東京都 // Tokyo",
+          "jp_14: 神奈川県 // Kanagawa",
+          "jp_15: 新潟県 // Niigata",
+          "jp_16: 富山県 // Toyama",
+          "jp_17: 石川県 // Ishikawa",
+          "jp_18: 福井県 // Fukui",
+          "jp_19: 山梨県 // Yamanashi",
+          "jp_20: 長野県 // Nagano",
+          "jp_21: 岐阜県 // Gifu",
+          "jp_22: 静岡県 // Shizuoka",
+          "jp_23: 愛知県 // Aichi",
+          "jp_24: 三重県 // Mie",
+          "jp_25: 滋賀県 // Shiga",
+          "jp_26: 京都府 // Kyoto",
+          "jp_27: 大阪府 // Osaka",
+          "jp_28: 兵庫県 // Hyougo",
+          "jp_29: 奈良県 // Nara",
+          "jp_30: 和歌山県 // Wakayama",
+          "jp_31: 鳥取県 // Tottori",
+          "jp_32: 島根県 // Shimane",
+          "jp_33: 岡山県 // Okayama",
+          "jp_34: 広島県 // Hiroshima",
+          "jp_35: 山口県 // Yamaguchi",
+          "jp_36: 徳島県 // Tokushima",
+          "jp_37: 香川県 // Kagawa",
+          "jp_38: 愛媛県 // Ehime",
+          "jp_39: 高知県 // Kouchi",
+          "jp_40: 福岡県 // Fukuoka",
+          "jp_41: 佐賀県 // Saga",
+          "jp_42: 長崎県 // Nagasaki",
+          "jp_43: 熊本県 // Kumamoto",
+          "jp_44: 大分県 // Oita",
+          "jp_45: 宮崎県 // Miyazaki",
+          "jp_46: 鹿児島県 // Kagoshima",
+          "jp_47: 沖縄県 // Okinawa",
+          "tw_01: 台北市 // Taipei City",
+          "tw_02: 新北市 // New Taipei City",
+          "tw_03: 桃園市 // Taoyuan City",
+          "tw_04: 台中市 // Taichung City",
+          "tw_05: 台南市 // Tainan City",
+          "tw_06: 高雄市 // Kaohsiung City",
+          "tw_07: 基隆市 // Keelung City",
+          "tw_08: 新竹市 // Hsinchu City",
+          "tw_09: 嘉義市 // Chiayi City",
+          "tw_10: 新竹県 // Hsinchu County",
+          "tw_11: 苗栗県 // Miaoli County",
+          "tw_12: 彰化県 // Changhua County",
+          "tw_13: 南投県 // Nantou County",
+          "tw_14: 雲林県 // Yunlin County",
+          "tw_15: 嘉義県 // Chiayi County",
+          "tw_16: 屏東県 // Pingtung County",
+          "tw_17: 宜蘭県 // Yilan County",
+          "tw_18: 花蓮県 // Hualien County",
+          "tw_19: 台東県 // Taitung County",
+          "tw_20: 澎湖県 // Penghu County",
+          "tw_21: 金門県 // Kinmen County",
+          "tw_22: 連江県 // Lienchiang County",
+          "th_01: バンコク // Bangkok",
+          "th_02: パタヤ // Pattaya",
+          "th_03: 北部 // Northern",
+          "th_04: 中央部 // Central",
+          "th_05: 南部 // Southern",
+          "th_06: 東部 // Eastern",
+          "th_07: 東北部 // NorthEastern",
+          "th_08: 西部 // Western",
+          "id_01: バリ // Bali",
+          "id_02: バンドン // Bandung",
+          "id_03: バンジャルマシン // Banjarmasin",
+          "id_04: ジャボデタベック (ジャカルタ首都圏) // Jabodetabek",
+          "id_06: マカッサル // Makassar",
+          "id_07: メダン // Medan",
+          "id_08: パレンバン // Palembang",
+          "id_09: サマリンダ // Samarinda",
+          "id_10: スマラン // Semarang",
+          "id_11: スラバヤ // Surabaya",
+          "id_12: ジョグジャカルタ // Yogyakarta",
+          "id_05: その他のエリア // Lainnya"
+        ]
+      },
+      "GenderDemographicFilter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DemographicFilter"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "oneOf": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/GenderDemographic"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "GenderDemographic": {
+        "type": "string",
+        "enum": [
+          "male",
+          "female"
+        ]
+      },
+      "OperatorDemographicFilter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DemographicFilter"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "and": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DemographicFilter"
+                }
+              },
+              "or": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/DemographicFilter"
+                }
+              },
+              "not": {
+                "$ref": "#/components/schemas/DemographicFilter"
+              }
+            }
+          }
+        ]
+      },
+      "SubscriptionPeriodDemographicFilter": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DemographicFilter"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "gte": {
+                "$ref": "#/components/schemas/SubscriptionPeriodDemographic"
+              },
+              "lt": {
+                "$ref": "#/components/schemas/SubscriptionPeriodDemographic"
+              }
+            }
+          }
+        ]
+      },
+      "SubscriptionPeriodDemographic": {
+        "type": "string",
+        "enum": [
+          "day_7",
+          "day_30",
+          "day_90",
+          "day_180",
+          "day_365"
+        ]
+      },
+      "Limit": {
+        "type": "object",
+        "description": "Limit of the Narrowcast",
+        "properties": {
+          "max": {
+            "type": "integer",
+            "description": "The maximum number of narrowcast messages to send.\nUse this parameter to limit the number of narrowcast messages sent.\nThe recipients will be chosen at random.\n",
+            "format": "int32",
+            "minimum": 1.0
+          },
+          "upToRemainingQuota": {
+            "type": "boolean",
+            "description": "If true, the message will be sent within the maximum number of deliverable messages. The default value is `false`.\n\nTargets will be selected at random.\n",
+            "default": "false"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-narrowcast-message"
+        }
+      },
+      "NarrowcastProgressResponse": {
+        "type": "object",
+        "required": [
+          "phase",
+          "acceptedTime"
+        ],
+        "properties": {
+          "phase": {
+            "type": "string",
+            "description": "The current status. One of:\n\n`waiting`: Messages are not yet ready to be sent. They are currently being filtered or processed in some way.\n`sending`: Messages are currently being sent.\n`succeeded`: Messages were sent successfully. This may not mean the messages were successfully received.\n`failed`: Messages failed to be sent. Use the failedDescription property to find the cause of the failure.\n",
+            "enum": [
+              "waiting",
+              "sending",
+              "succeeded",
+              "failed"
+            ]
+          },
+          "successCount": {
+            "type": "integer",
+            "description": "The number of users who successfully received the message.",
+            "format": "int64"
+          },
+          "failureCount": {
+            "type": "integer",
+            "description": "The number of users who failed to send the message.",
+            "format": "int64"
+          },
+          "targetCount": {
+            "type": "integer",
+            "description": "The number of intended recipients of the message.",
+            "format": "int64"
+          },
+          "failedDescription": {
+            "type": "string",
+            "description": "The reason the message failed to be sent. This is only included with a `phase` property value of `failed`."
+          },
+          "errorCode": {
+            "type": "integer",
+            "description": "Error summary. This is only included with a phase property value of failed.\nOne of:\n\n`1`: An internal error occurred.\n`2`: An error occurred because there weren't enough recipients.\n`3`: A conflict error of requests occurs because a request that has already been accepted is retried.\n",
+            "format": "int64"
+          },
+          "acceptedTime": {
+            "type": "string",
+            "description": "Narrowcast message request accepted time in milliseconds.\n\nFormat: ISO 8601 (e.g. 2020-12-03T10:15:30.121Z)\nTimezone: UTC\n",
+            "format": "date-time"
+          },
+          "completedTime": {
+            "type": "string",
+            "description": "Processing of narrowcast message request completion time in milliseconds. Returned when the phase property is succeeded or failed.\n\nFormat: ISO 8601 (e.g. 2020-12-03T10:15:30.121Z)\nTimezone: UTC\n",
+            "format": "date-time"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-narrowcast-progress-status"
+        }
+      },
+      "BroadcastRequest": {
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "List of Message objects.",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "notificationDisabled": {
+            "$ref": "#/components/schemas/NotificationDisabled"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#send-broadcast-message"
+        }
+      },
+      "MessageQuotaResponse": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/QuotaType"
+          },
+          "value": {
+            "type": "integer",
+            "description": "The target limit for sending messages in the current month. This property is returned when the `type` property has a value of `limited`.\n",
+            "format": "int64"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-quota"
+        }
+      },
+      "QuotaType": {
+        "type": "string",
+        "description": "One of the following values to indicate whether a target limit is set or not.",
+        "enum": [
+          "none",
+          "limited"
+        ],
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-quota"
+        }
+      },
+      "QuotaConsumptionResponse": {
+        "type": "object",
+        "required": [
+          "totalUsage"
+        ],
+        "properties": {
+          "totalUsage": {
+            "type": "integer",
+            "description": "The number of sent messages in the current month",
+            "format": "int64"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-consumption"
+        }
+      },
+      "NumberOfMessagesResponse": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Aggregation process status. One of:\n\n`ready`: The number of messages can be obtained.\n`unready`: We haven't finished calculating the number of sent messages for the specified in date. For example, this property is returned when the delivery date or a future date is specified. Calculation usually takes about a day.\n`unavailable_for_privacy`: The total number of messages on the specified day is less than 20.\n`out_of_service`: The specified date is earlier than the date on which we first started calculating sent messages (March 31, 2018).\n",
+            "enum": [
+              "ready",
+              "unready",
+              "unavailable_for_privacy",
+              "out_of_service"
+            ]
+          },
+          "success": {
+            "type": "integer",
+            "description": "The number of messages delivered using the phone number on the date specified in `date`.\nThe response has this property only when the value of `status` is `ready`.\n\n",
+            "format": "int64"
+          }
+        }
+      },
+      "ValidateMessageRequest": {
+        "type": "object",
+        "required": [
+          "messages"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "Array of message objects to validate",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          }
+        }
+      },
+      "GetAggregationUnitUsageResponse": {
+        "type": "object",
+        "required": [
+          "numOfCustomAggregationUnits"
+        ],
+        "properties": {
+          "numOfCustomAggregationUnits": {
+            "type": "integer",
+            "description": "Number of aggregation units used this month.",
+            "format": "int64"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-number-of-units-used-this-month"
+        }
+      },
+      "GetAggregationUnitNameListResponse": {
+        "type": "object",
+        "required": [
+          "customAggregationUnits"
+        ],
+        "properties": {
+          "customAggregationUnits": {
+            "type": "array",
+            "description": "An array of strings indicating the names of aggregation units used this month.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "next": {
+            "type": "string",
+            "description": "A continuation token to get the next array of unit names.\nReturned only when there are remaining aggregation units that weren't returned in customAggregationUnits in the original request.\n\n"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-name-list-of-units-used-this-month"
+        }
+      },
+      "UserProfileResponse": {
+        "type": "object",
+        "required": [
+          "displayName",
+          "userId"
+        ],
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "User's display name"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "pictureUrl": {
+            "type": "string",
+            "description": "Profile image URL. `https` image URL. Not included in the response if the user doesn't have a profile image.",
+            "format": "uri"
+          },
+          "statusMessage": {
+            "type": "string",
+            "description": "User's status message. Not included in the response if the user doesn't have a status message."
+          },
+          "language": {
+            "type": "string",
+            "description": "User's language, as a BCP 47 language tag. Not included in the response if the user hasn't yet consented to the LINE Privacy Policy.",
+            "example": "en"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-profile"
+        }
+      },
+      "GetFollowersResponse": {
+        "type": "object",
+        "required": [
+          "userIds"
+        ],
+        "properties": {
+          "userIds": {
+            "type": "array",
+            "description": "An array of strings indicating user IDs of users that have added the LINE Official Account as a friend.\nOnly users of LINE for iOS and LINE for Android are included in `userIds`.\n",
+            "maxItems": 1000,
+            "items": {
+              "type": "string"
+            }
+          },
+          "next": {
+            "type": "string",
+            "description": "A continuation token to get the next array of user IDs.\nReturned only when there are remaining user IDs that weren't returned in `userIds` in the original request.\nThe number of user IDs in the `userIds` element doesn't have to reach the maximum number specified by `limit` for the `next` property to be included in the response.\n\n"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-follower-ids"
+        }
+      },
+      "BotInfoResponse": {
+        "type": "object",
+        "required": [
+          "userId",
+          "basicId",
+          "displayName",
+          "chatMode",
+          "markAsReadMode"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "Bot's user ID"
+          },
+          "basicId": {
+            "type": "string",
+            "description": "Bot's basic ID"
+          },
+          "premiumId": {
+            "type": "string",
+            "description": "Bot's premium ID. Not included in the response if the premium ID isn't set."
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Bot's display name"
+          },
+          "pictureUrl": {
+            "type": "string",
+            "description": "Profile image URL. `https` image URL. Not included in the response if the bot doesn't have a profile image.",
+            "format": "uri"
+          },
+          "chatMode": {
+            "type": "string",
+            "description": "Chat settings set in the LINE Official Account Manager. One of:\n\n`chat`: Chat is set to \"On\".\n`bot`: Chat is set to \"Off\".\n",
+            "enum": [
+              "chat",
+              "bot"
+            ]
+          },
+          "markAsReadMode": {
+            "type": "string",
+            "description": "Automatic read setting for messages. If the chat is set to \"Off\", auto is returned. If the chat is set to \"On\", manual is returned.\n\n`auto`: Auto read setting is enabled.\n`manual`: Auto read setting is disabled.\n\n",
+            "enum": [
+              "auto",
+              "manual"
+            ]
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-bot-info"
+        }
+      },
+      "GroupUserProfileResponse": {
+        "type": "object",
+        "required": [
+          "displayName",
+          "userId"
+        ],
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "User's display name"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "pictureUrl": {
+            "type": "string",
+            "description": "Profile image URL. `https` image URL. Not included in the response if the user doesn't have a profile image.",
+            "format": "uri"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-group-member-profile"
+        }
+      },
+      "RoomUserProfileResponse": {
+        "type": "object",
+        "required": [
+          "displayName",
+          "userId"
+        ],
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "description": "User's display name"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "pictureUrl": {
+            "type": "string",
+            "description": "Profile image URL. `https` image URL. Not included in the response if the user doesn't have a profile image.",
+            "format": "uri"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-room-member-profile"
+        }
+      },
+      "MembersIdsResponse": {
+        "type": "object",
+        "required": [
+          "memberIds"
+        ],
+        "properties": {
+          "memberIds": {
+            "type": "array",
+            "description": "List of user IDs of members in the group chat. Only users of LINE for iOS and LINE for Android are included in `memberIds`.",
+            "maxItems": 100,
+            "items": {
+              "type": "string"
+            }
+          },
+          "next": {
+            "type": "string",
+            "description": "A continuation token to get the next array of user IDs of the members in the group chat.\nReturned only when there are remaining user IDs that were not returned in `memberIds` in the original request.\n"
+          }
+        }
+      },
+      "GroupSummaryResponse": {
+        "type": "object",
+        "required": [
+          "groupId",
+          "groupName"
+        ],
+        "properties": {
+          "groupId": {
+            "type": "string",
+            "description": "Group ID"
+          },
+          "groupName": {
+            "type": "string",
+            "description": "Group name"
+          },
+          "pictureUrl": {
+            "type": "string",
+            "description": "Group icon URL. Not included in the response if the user doesn't set a group profile icon.",
+            "format": "uri"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-group-summary"
+        }
+      },
+      "GroupMemberCountResponse": {
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "The count of members in the group chat. The number returned excludes the LINE Official Account.",
+            "format": "int32"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-members-group-count"
+        }
+      },
+      "RoomMemberCountResponse": {
+        "type": "object",
+        "required": [
+          "count"
+        ],
+        "properties": {
+          "count": {
+            "type": "integer",
+            "description": "The count of members in the multi-person chat. The number returned excludes the LINE Official Account.",
+            "format": "int32"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-members-room-count"
+        }
+      },
+      "RichMenuRequest": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "$ref": "#/components/schemas/RichMenuSize"
+          },
+          "selected": {
+            "type": "boolean",
+            "description": "`true` to display the rich menu by default. Otherwise, `false`."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the rich menu. This value can be used to help manage your rich menus and is not displayed to users.",
+            "maxLength": 300
+          },
+          "chatBarText": {
+            "type": "string",
+            "description": "Text displayed in the chat bar",
+            "maxLength": 14
+          },
+          "areas": {
+            "type": "array",
+            "description": "Array of area objects which define the coordinates and size of tappable areas",
+            "items": {
+              "$ref": "#/components/schemas/RichMenuArea"
+            }
+          }
+        }
+      },
+      "RichMenuSize": {
+        "type": "object",
+        "description": "Rich menu size",
+        "properties": {
+          "width": {
+            "type": "integer",
+            "description": "width",
+            "format": "int64",
+            "maximum": 2147483647.0,
+            "minimum": 1.0
+          },
+          "height": {
+            "type": "integer",
+            "description": "height",
+            "format": "int64",
+            "maximum": 2147483647.0,
+            "minimum": 1.0
+          }
+        }
+      },
+      "RichMenuArea": {
+        "type": "object",
+        "description": "Rich menu area",
+        "properties": {
+          "bounds": {
+            "$ref": "#/components/schemas/RichMenuBounds"
+          },
+          "action": {
+            "$ref": "#/components/schemas/Action"
+          }
+        }
+      },
+      "RichMenuBounds": {
+        "type": "object",
+        "description": "Rich menu bounds",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "description": "Horizontal position relative to the top-left corner of the area.",
+            "format": "int64",
+            "maximum": 2147483647.0,
+            "minimum": 0.0
+          },
+          "y": {
+            "type": "integer",
+            "description": "Vertical position relative to the top-left corner of the area.",
+            "format": "int64",
+            "maximum": 2147483647.0,
+            "minimum": 0.0
+          },
+          "width": {
+            "type": "integer",
+            "description": "Width of the area.",
+            "format": "int64",
+            "maximum": 2147483647.0,
+            "minimum": 1.0
+          },
+          "height": {
+            "type": "integer",
+            "description": "Height of the area.",
+            "format": "int64",
+            "maximum": 2147483647.0,
+            "minimum": 1.0
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#bounds-object"
+        }
+      },
+      "RichMenuIdResponse": {
+        "type": "object",
+        "required": [
+          "richMenuId"
+        ],
+        "properties": {
+          "richMenuId": {
+            "type": "string",
+            "description": "Rich menu ID"
+          }
+        }
+      },
+      "RichMenuResponse": {
+        "type": "object",
+        "required": [
+          "richMenuId",
+          "size",
+          "selected",
+          "name",
+          "chatBarText",
+          "areas"
+        ],
+        "properties": {
+          "richMenuId": {
+            "type": "string",
+            "description": "ID of a rich menu"
+          },
+          "size": {
+            "$ref": "#/components/schemas/RichMenuSize"
+          },
+          "selected": {
+            "type": "boolean",
+            "description": "`true` to display the rich menu by default. Otherwise, `false`."
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the rich menu. This value can be used to help manage your rich menus and is not displayed to users.",
+            "maxLength": 300
+          },
+          "chatBarText": {
+            "type": "string",
+            "description": "Text displayed in the chat bar",
+            "maxLength": 14
+          },
+          "areas": {
+            "type": "array",
+            "description": "Array of area objects which define the coordinates and size of tappable areas",
+            "maxItems": 20,
+            "items": {
+              "$ref": "#/components/schemas/RichMenuArea"
+            }
+          }
+        }
+      },
+      "RichMenuListResponse": {
+        "type": "object",
+        "required": [
+          "richmenus"
+        ],
+        "properties": {
+          "richmenus": {
+            "type": "array",
+            "description": "Rich menus",
+            "items": {
+              "$ref": "#/components/schemas/RichMenuResponse"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-rich-menu-list"
+        }
+      },
+      "CreateRichMenuAliasRequest": {
+        "type": "object",
+        "required": [
+          "richMenuAliasId",
+          "richMenuId"
+        ],
+        "properties": {
+          "richMenuAliasId": {
+            "type": "string",
+            "description": "Rich menu alias ID, which can be any ID, unique for each channel.",
+            "maxLength": 32,
+            "minLength": 1,
+            "pattern": "^[a-z0-9_-]{1,32}$"
+          },
+          "richMenuId": {
+            "type": "string",
+            "description": "The rich menu ID to be associated with the rich menu alias."
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#create-rich-menu-alias"
+        }
+      },
+      "RichMenuAliasResponse": {
+        "type": "object",
+        "required": [
+          "richMenuAliasId",
+          "richMenuId"
+        ],
+        "properties": {
+          "richMenuAliasId": {
+            "type": "string",
+            "description": "Rich menu alias ID."
+          },
+          "richMenuId": {
+            "type": "string",
+            "description": "The rich menu ID associated with the rich menu alias."
+          }
+        }
+      },
+      "UpdateRichMenuAliasRequest": {
+        "type": "object",
+        "required": [
+          "richMenuId"
+        ],
+        "properties": {
+          "richMenuId": {
+            "type": "string",
+            "description": "The rich menu ID to be associated with the rich menu alias."
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#update-rich-menu-alias"
+        }
+      },
+      "RichMenuAliasListResponse": {
+        "type": "object",
+        "required": [
+          "aliases"
+        ],
+        "properties": {
+          "aliases": {
+            "type": "array",
+            "description": "Rich menu aliases.",
+            "items": {
+              "$ref": "#/components/schemas/RichMenuAliasResponse"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-rich-menu-alias-list"
+        }
+      },
+      "RichMenuBulkLinkRequest": {
+        "type": "object",
+        "required": [
+          "richMenuId",
+          "userIds"
+        ],
+        "properties": {
+          "richMenuId": {
+            "type": "string",
+            "description": "ID of a rich menu"
+          },
+          "userIds": {
+            "type": "array",
+            "description": "Array of user IDs. Found in the `source` object of webhook event objects. Do not use the LINE ID used in LINE.",
+            "maxItems": 500,
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#link-rich-menu-to-users"
+        }
+      },
+      "RichMenuBulkUnlinkRequest": {
+        "type": "object",
+        "required": [
+          "userIds"
+        ],
+        "properties": {
+          "userIds": {
+            "type": "array",
+            "description": "Array of user IDs. Found in the `source` object of webhook event objects. Do not use the LINE ID used in LINE.",
+            "maxItems": 500,
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#unlink-rich-menu-from-users"
+        }
+      },
+      "RichMenuBatchRequest": {
+        "type": "object",
+        "required": [
+          "operations"
+        ],
+        "properties": {
+          "operations": {
+            "type": "array",
+            "description": "Array of Rich menu operation object...",
+            "maxItems": 1000,
+            "items": {
+              "$ref": "#/components/schemas/RichMenuBatchOperation"
+            }
+          },
+          "resumeRequestKey": {
+            "type": "string",
+            "description": "Key for retry. Key value is a string matching the regular expression pattern",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "^[a-zA-Z0-9_-]{1,100}$"
+          }
+        }
+      },
+      "RichMenuBatchOperation": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "link": "#/components/schemas/RichMenuBatchLinkOperation",
+            "unlink": "#/components/schemas/RichMenuBatchUnlinkOperation",
+            "unlinkAll": "#/components/schemas/RichMenuBatchUnlinkAllOperation"
+          }
+        },
+        "description": "Rich menu operation object represents the batch operation to the rich menu linked to the user.",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "The type of operation to the rich menu linked to the user. One of link, unlink, or unlinkAll."
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#batch-control-rich-menus-of-users-operations"
+        }
+      },
+      "RichMenuBatchLinkOperation": {
+        "type": "object",
+        "description": "Replace the rich menu with the rich menu specified in the `to` property for all users linked to the rich menu specified in the `from` property.",
+        "required": [
+          "from",
+          "to"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RichMenuBatchOperation"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string"
+              },
+              "to": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "RichMenuBatchUnlinkOperation": {
+        "type": "object",
+        "description": "Unlink the rich menu for all users linked to the rich menu specified in the `from` property.",
+        "required": [
+          "from"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RichMenuBatchOperation"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "from": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "RichMenuBatchUnlinkAllOperation": {
+        "type": "object",
+        "description": "Unlink the rich menu from all users linked to the rich menu.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RichMenuBatchOperation"
+          }
+        ]
+      },
+      "RichMenuBatchProgressResponse": {
+        "type": "object",
+        "required": [
+          "phase",
+          "acceptedTime"
+        ],
+        "properties": {
+          "phase": {
+            "$ref": "#/components/schemas/RichMenuBatchProgressPhase"
+          },
+          "acceptedTime": {
+            "type": "string",
+            "description": "The accepted time in milliseconds of the request of batch control the rich menu.\n\nFormat: ISO 8601 (e.g. 2023-06-08T10:15:30.121Z)\nTimezone: UTC\n",
+            "format": "date-time"
+          },
+          "completedTime": {
+            "type": "string",
+            "description": "The completed time in milliseconds of rich menu batch control. Returned when the phase property is succeeded or failed.\n\nFormat: ISO 8601 (e.g. 2023-06-08T10:15:30.121Z)\nTimezone: UTC\n",
+            "format": "date-time"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#get-batch-control-rich-menus-progress-status-response"
+        }
+      },
+      "RichMenuBatchProgressPhase": {
+        "type": "string",
+        "description": "The current status. One of:\n\n`ongoing`: Rich menu batch control is in progress.\n`succeeded`: Rich menu batch control is complete.\n`failed`: Rich menu batch control failed.\n          This means that the rich menu for one or more users couldn't be controlled. \n          There may also be users whose operations have been successfully completed.\n",
+        "enum": [
+          "ongoing",
+          "succeeded",
+          "failed"
+        ]
+      },
+      "IssueLinkTokenResponse": {
+        "type": "object",
+        "required": [
+          "linkToken"
+        ],
+        "properties": {
+          "linkToken": {
+            "type": "string",
+            "description": "Link token.\nLink tokens are valid for 10 minutes and can only be used once.\n\n"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#issue-link-token"
+        }
+      },
+      "MarkMessagesAsReadRequest": {
+        "type": "object",
+        "required": [
+          "chat"
+        ],
+        "properties": {
+          "chat": {
+            "$ref": "#/components/schemas/ChatReference"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#mark-messages-from-users-as-read"
+        }
+      },
+      "ChatReference": {
+        "type": "object",
+        "description": "Chat reference",
+        "required": [
+          "userId"
+        ],
+        "properties": {
+          "userId": {
+            "type": "string",
+            "description": "The target user ID"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#mark-messages-from-users-as-read"
+        }
+      },
+      "PnpMessagesRequest": {
+        "type": "object",
+        "required": [
+          "messages",
+          "to"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "Message to be sent.",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "to": {
+            "type": "string",
+            "description": "Message destination. Specify a phone number that has been normalized to E.164 format and hashed with SHA256."
+          },
+          "notificationDisabled": {
+            "$ref": "#/components/schemas/NotificationDisabled"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#send-line-notification-message"
+        }
+      },
+      "AudienceMatchMessagesRequest": {
+        "type": "object",
+        "required": [
+          "messages",
+          "to"
+        ],
+        "properties": {
+          "messages": {
+            "type": "array",
+            "description": "Destination of the message (A value obtained by hashing the telephone number, which is another value normalized to E.164 format, with SHA256).",
+            "maxItems": 5,
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            }
+          },
+          "to": {
+            "type": "array",
+            "description": "Message to send.",
+            "maxItems": 500,
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "notificationDisabled": {
+            "$ref": "#/components/schemas/NotificationDisabled"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/partner-docs/#phone-audience-match"
+        }
+      },
+      "Message": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "text": "#/components/schemas/TextMessage",
+            "sticker": "#/components/schemas/StickerMessage",
+            "image": "#/components/schemas/ImageMessage",
+            "video": "#/components/schemas/VideoMessage",
+            "audio": "#/components/schemas/AudioMessage",
+            "location": "#/components/schemas/LocationMessage",
+            "imagemap": "#/components/schemas/ImagemapMessage",
+            "template": "#/components/schemas/TemplateMessage",
+            "flex": "#/components/schemas/FlexMessage"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of message"
+          },
+          "quickReply": {
+            "$ref": "#/components/schemas/QuickReply"
+          },
+          "sender": {
+            "$ref": "#/components/schemas/Sender"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#message-common-properties"
+        }
+      },
+      "QuickReply": {
+        "type": "object",
+        "description": "Quick reply",
+        "properties": {
+          "items": {
+            "type": "array",
+            "description": "Quick reply button objects.",
+            "maxItems": 13,
+            "items": {
+              "$ref": "#/components/schemas/QuickReplyItem"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#items-object"
+        }
+      },
+      "QuickReplyItem": {
+        "type": "object",
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "description": "URL of the icon that is displayed at the beginning of the button",
+            "format": "uri",
+            "maxLength": 2000
+          },
+          "action": {
+            "$ref": "#/components/schemas/Action"
+          },
+          "type": {
+            "type": "string",
+            "description": "`action`",
+            "default": "action"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#items-object"
+        }
+      },
+      "Sender": {
+        "type": "object",
+        "description": "Change icon and display name",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Display name. Certain words such as `LINE` may not be used.",
+            "maxLength": 20
+          },
+          "iconUrl": {
+            "type": "string",
+            "description": "URL of the image to display as an icon when sending a message",
+            "format": "uri",
+            "maxLength": 2000
+          }
+        }
+      },
+      "TextMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "emojis": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Emoji"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Emoji": {
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "productId": {
+            "type": "string"
+          },
+          "emojiId": {
+            "type": "string"
+          }
+        }
+      },
+      "StickerMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "packageId": {
+                "type": "string"
+              },
+              "stickerId": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ImageMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "originalContentUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "previewImageUrl": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        ]
+      },
+      "VideoMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "originalContentUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "previewImageUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "trackingId": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "AudioMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "originalContentUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "duration": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        ]
+      },
+      "LocationMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "address": {
+                "type": "string"
+              },
+              "latitude": {
+                "type": "number",
+                "format": "double"
+              },
+              "longitude": {
+                "type": "number",
+                "format": "double"
+              }
+            }
+          }
+        ]
+      },
+      "ImagemapMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "baseUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "altText": {
+                "type": "string"
+              },
+              "baseSize": {
+                "$ref": "#/components/schemas/ImagemapBaseSize"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ImagemapAction"
+                }
+              },
+              "video": {
+                "$ref": "#/components/schemas/ImagemapVideo"
+              }
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#imagemap-message"
+        }
+      },
+      "ImagemapBaseSize": {
+        "type": "object",
+        "properties": {
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ImagemapAction": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "message": "#/components/schemas/MessageImagemapAction",
+            "uri": "#/components/schemas/URIImagemapAction"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "area": {
+            "$ref": "#/components/schemas/ImagemapArea"
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#imagemap-action-objects"
+        }
+      },
+      "MessageImagemapAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ImagemapAction"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "URIImagemapAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ImagemapAction"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "linkUri": {
+                "type": "string"
+              },
+              "label": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "ImagemapArea": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "y": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "width": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "height": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "ImagemapVideo": {
+        "type": "object",
+        "properties": {
+          "originalContentUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "previewImageUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "area": {
+            "$ref": "#/components/schemas/ImagemapArea"
+          },
+          "externalLink": {
+            "$ref": "#/components/schemas/ImagemapExternalLink"
+          }
+        }
+      },
+      "ImagemapExternalLink": {
+        "type": "object",
+        "properties": {
+          "linkUri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "TemplateMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "altText": {
+                "type": "string"
+              },
+              "template": {
+                "$ref": "#/components/schemas/Template"
+              }
+            }
+          }
+        ]
+      },
+      "Template": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "buttons": "#/components/schemas/ButtonsTemplate",
+            "confirm": "#/components/schemas/ConfirmTemplate",
+            "carousel": "#/components/schemas/CarouselTemplate",
+            "image_carousel": "#/components/schemas/ImageCarouselTemplate"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "ButtonsTemplate": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Template"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "thumbnailImageUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "imageAspectRatio": {
+                "type": "string"
+              },
+              "imageSize": {
+                "type": "string"
+              },
+              "imageBackgroundColor": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "defaultAction": {
+                "$ref": "#/components/schemas/Action"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Action"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ConfirmTemplate": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Template"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "actions": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Action"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "CarouselTemplate": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Template"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "columns": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CarouselColumn"
+                }
+              },
+              "imageAspectRatio": {
+                "type": "string"
+              },
+              "imageSize": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "CarouselColumn": {
+        "type": "object",
+        "description": "Column object for carousel template.",
+        "properties": {
+          "thumbnailImageUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "imageBackgroundColor": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "defaultAction": {
+            "$ref": "#/components/schemas/Action"
+          },
+          "actions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Action"
+            }
+          }
+        }
+      },
+      "ImageCarouselTemplate": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Template"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "columns": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/ImageCarouselColumn"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ImageCarouselColumn": {
+        "type": "object",
+        "properties": {
+          "imageUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "action": {
+            "$ref": "#/components/schemas/Action"
+          }
+        }
+      },
+      "FlexMessage": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Message"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "altText": {
+                "type": "string"
+              },
+              "contents": {
+                "$ref": "#/components/schemas/FlexContainer"
+              }
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#flex-message"
+        }
+      },
+      "FlexContainer": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "bubble": "#/components/schemas/FlexBubble",
+            "carousel": "#/components/schemas/FlexCarousel"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "FlexBubble": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexContainer"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "direction": {
+                "type": "string",
+                "enum": [
+                  "ltr",
+                  "rtl"
+                ]
+              },
+              "styles": {
+                "$ref": "#/components/schemas/FlexBubbleStyles"
+              },
+              "header": {
+                "$ref": "#/components/schemas/FlexBox"
+              },
+              "hero": {
+                "$ref": "#/components/schemas/FlexComponent"
+              },
+              "body": {
+                "$ref": "#/components/schemas/FlexBox"
+              },
+              "footer": {
+                "$ref": "#/components/schemas/FlexBox"
+              },
+              "size": {
+                "type": "string",
+                "enum": [
+                  "nano",
+                  "micro",
+                  "deca",
+                  "hecto",
+                  "kilo",
+                  "mega",
+                  "giga"
+                ]
+              },
+              "action": {
+                "$ref": "#/components/schemas/Action"
+              }
+            }
+          }
+        ]
+      },
+      "FlexCarousel": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexContainer"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "contents": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FlexBubble"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "FlexBubbleStyles": {
+        "type": "object",
+        "properties": {
+          "header": {
+            "$ref": "#/components/schemas/FlexBlockStyle"
+          },
+          "hero": {
+            "$ref": "#/components/schemas/FlexBlockStyle"
+          },
+          "body": {
+            "$ref": "#/components/schemas/FlexBlockStyle"
+          },
+          "footer": {
+            "$ref": "#/components/schemas/FlexBlockStyle"
+          }
+        }
+      },
+      "FlexBlockStyle": {
+        "type": "object",
+        "properties": {
+          "backgroundColor": {
+            "type": "string"
+          },
+          "separator": {
+            "type": "boolean"
+          },
+          "separatorColor": {
+            "type": "string"
+          }
+        }
+      },
+      "FlexComponent": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "box": "#/components/schemas/FlexBox",
+            "button": "#/components/schemas/FlexButton",
+            "image": "#/components/schemas/FlexImage",
+            "video": "#/components/schemas/FlexVideo",
+            "icon": "#/components/schemas/FlexIcon",
+            "text": "#/components/schemas/FlexText",
+            "span": "#/components/schemas/FlexSpan",
+            "separator": "#/components/schemas/FlexSeparator",
+            "filler": "#/components/schemas/FlexFiller"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "FlexBox": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "properties": {
+              "layout": {
+                "type": "string",
+                "enum": [
+                  "horizontal",
+                  "vertical",
+                  "baseline"
+                ]
+              },
+              "flex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "contents": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FlexComponent"
+                }
+              },
+              "spacing": {
+                "type": "string"
+              },
+              "margin": {
+                "type": "string"
+              },
+              "position": {
+                "type": "string",
+                "enum": [
+                  "relative",
+                  "absolute"
+                ]
+              },
+              "offsetTop": {
+                "type": "string"
+              },
+              "offsetBottom": {
+                "type": "string"
+              },
+              "offsetStart": {
+                "type": "string"
+              },
+              "offsetEnd": {
+                "type": "string"
+              },
+              "backgroundColor": {
+                "type": "string"
+              },
+              "borderColor": {
+                "type": "string"
+              },
+              "borderWidth": {
+                "type": "string"
+              },
+              "cornerRadius": {
+                "type": "string"
+              },
+              "width": {
+                "type": "string"
+              },
+              "maxWidth": {
+                "type": "string"
+              },
+              "height": {
+                "type": "string"
+              },
+              "maxHeight": {
+                "type": "string"
+              },
+              "paddingAll": {
+                "type": "string"
+              },
+              "paddingTop": {
+                "type": "string"
+              },
+              "paddingBottom": {
+                "type": "string"
+              },
+              "paddingStart": {
+                "type": "string"
+              },
+              "paddingEnd": {
+                "type": "string"
+              },
+              "action": {
+                "$ref": "#/components/schemas/Action"
+              },
+              "justifyContent": {
+                "type": "string",
+                "enum": [
+                  "center",
+                  "flex-start",
+                  "flex-end",
+                  "space-between",
+                  "space-around",
+                  "space-evenly"
+                ]
+              },
+              "alignItems": {
+                "type": "string",
+                "enum": [
+                  "center",
+                  "flex-start",
+                  "flex-end"
+                ]
+              },
+              "background": {
+                "$ref": "#/components/schemas/FlexBoxBackground"
+              }
+            }
+          }
+        ]
+      },
+      "FlexButton": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "flex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "color": {
+                "type": "string"
+              },
+              "style": {
+                "type": "string",
+                "enum": [
+                  "primary",
+                  "secondary",
+                  "link"
+                ]
+              },
+              "action": {
+                "$ref": "#/components/schemas/Action"
+              },
+              "gravity": {
+                "type": "string",
+                "enum": [
+                  "top",
+                  "bottom",
+                  "center"
+                ]
+              },
+              "margin": {
+                "type": "string"
+              },
+              "position": {
+                "type": "string",
+                "enum": [
+                  "relative",
+                  "absolute"
+                ]
+              },
+              "offsetTop": {
+                "type": "string"
+              },
+              "offsetBottom": {
+                "type": "string"
+              },
+              "offsetStart": {
+                "type": "string"
+              },
+              "offsetEnd": {
+                "type": "string"
+              },
+              "height": {
+                "type": "string",
+                "enum": [
+                  "md",
+                  "sm"
+                ]
+              },
+              "adjustMode": {
+                "type": "string",
+                "enum": [
+                  "shrink-to-fit"
+                ]
+              },
+              "scaling": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "FlexImage": {
+        "type": "object",
+        "required": [
+          "type",
+          "url"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "description": "Image URL (Max character limit: 2000)\nProtocol: HTTPS (TLS 1.2 or later)\nImage format: JPEG or PNG\nMaximum image size: 1024×1024 pixels\nMaximum file size: 10 MB (300 KB when the animated property is true)\n",
+                "format": "uri"
+              },
+              "flex": {
+                "type": "integer",
+                "description": "The ratio of the width or height of this component within the parent box.",
+                "format": "int32"
+              },
+              "margin": {
+                "type": "string",
+                "description": "The minimum amount of space to include before this component in its parent container.\n"
+              },
+              "position": {
+                "type": "string",
+                "description": "Reference for offsetTop, offsetBottom, offsetStart, and offsetEnd. Specify one of the following values:\n\n`relative`: Use the previous box as reference.\n`absolute`: Use the top left of parent element as reference. The default value is relative.\n",
+                "enum": [
+                  "relative",
+                  "absolute"
+                ]
+              },
+              "offsetTop": {
+                "type": "string",
+                "description": "Offset."
+              },
+              "offsetBottom": {
+                "type": "string",
+                "description": "Offset."
+              },
+              "offsetStart": {
+                "type": "string",
+                "description": "Offset."
+              },
+              "offsetEnd": {
+                "type": "string",
+                "description": "Offset."
+              },
+              "align": {
+                "type": "string",
+                "description": "Alignment style in horizontal direction.\n",
+                "enum": [
+                  "start",
+                  "end",
+                  "center"
+                ]
+              },
+              "gravity": {
+                "type": "string",
+                "description": "Alignment style in vertical direction.",
+                "enum": [
+                  "top",
+                  "bottom",
+                  "center"
+                ]
+              },
+              "size": {
+                "type": "string",
+                "description": "The maximum image width. This is md by default.\n",
+                "default": "md"
+              },
+              "aspectRatio": {
+                "type": "string",
+                "description": "Aspect ratio of the image.\n`{width}:{height}` format.\nSpecify the value of `{width}` and `{height}` in the range from `1` to `100000`.\nHowever, you cannot set `{height}` to a value that is more than three times the value of `{width}`.\nThe default value is `1:1`.\n"
+              },
+              "aspectMode": {
+                "type": "string",
+                "description": "The display style of the image if the aspect ratio of the image and that specified by the aspectRatio property do not match.\n",
+                "enum": [
+                  "fit",
+                  "cover"
+                ]
+              },
+              "backgroundColor": {
+                "type": "string",
+                "description": "Background color of the image. Use a hexadecimal color code."
+              },
+              "action": {
+                "$ref": "#/components/schemas/Action"
+              },
+              "animated": {
+                "type": "boolean",
+                "description": "When this is `true`, an animated image (APNG) plays.\nYou can specify a value of true up to 10 images in a single message.\nYou can't send messages that exceed this limit.\nThis is `false` by default.\nAnimated images larger than 300 KB aren't played back.\n",
+                "default": "false"
+              }
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#f-image"
+        }
+      },
+      "FlexVideo": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "previewUrl": {
+                "type": "string",
+                "format": "uri"
+              },
+              "altContent": {
+                "$ref": "#/components/schemas/FlexComponent"
+              },
+              "aspectRatio": {
+                "type": "string"
+              },
+              "action": {
+                "$ref": "#/components/schemas/Action"
+              }
+            }
+          }
+        ]
+      },
+      "FlexIcon": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "size": {
+                "type": "string"
+              },
+              "aspectRatio": {
+                "type": "string"
+              },
+              "margin": {
+                "type": "string"
+              },
+              "position": {
+                "type": "string",
+                "enum": [
+                  "relative",
+                  "absolute"
+                ]
+              },
+              "offsetTop": {
+                "type": "string"
+              },
+              "offsetBottom": {
+                "type": "string"
+              },
+              "offsetStart": {
+                "type": "string"
+              },
+              "offsetEnd": {
+                "type": "string"
+              },
+              "scaling": {
+                "type": "boolean"
+              }
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#icon"
+        }
+      },
+      "FlexText": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "flex": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "text": {
+                "type": "string"
+              },
+              "size": {
+                "type": "string"
+              },
+              "align": {
+                "type": "string",
+                "enum": [
+                  "start",
+                  "end",
+                  "center"
+                ]
+              },
+              "gravity": {
+                "type": "string",
+                "enum": [
+                  "top",
+                  "bottom",
+                  "center"
+                ]
+              },
+              "color": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "string",
+                "enum": [
+                  "regular",
+                  "bold"
+                ]
+              },
+              "style": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "italic"
+                ]
+              },
+              "decoration": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "underline",
+                  "line-through"
+                ]
+              },
+              "wrap": {
+                "type": "boolean"
+              },
+              "lineSpacing": {
+                "type": "string"
+              },
+              "margin": {
+                "type": "string"
+              },
+              "position": {
+                "type": "string",
+                "enum": [
+                  "relative",
+                  "absolute"
+                ]
+              },
+              "offsetTop": {
+                "type": "string"
+              },
+              "offsetBottom": {
+                "type": "string"
+              },
+              "offsetStart": {
+                "type": "string"
+              },
+              "offsetEnd": {
+                "type": "string"
+              },
+              "action": {
+                "$ref": "#/components/schemas/Action"
+              },
+              "maxLines": {
+                "type": "integer",
+                "format": "int32"
+              },
+              "contents": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FlexSpan"
+                }
+              },
+              "adjustMode": {
+                "type": "string",
+                "enum": [
+                  "shrink-to-fit"
+                ]
+              },
+              "scaling": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "FlexSpan": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              },
+              "size": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              },
+              "weight": {
+                "type": "string",
+                "enum": [
+                  "regular",
+                  "bold"
+                ]
+              },
+              "style": {
+                "type": "string",
+                "enum": [
+                  "normal",
+                  "italic"
+                ]
+              },
+              "decoration": {
+                "type": "string",
+                "enum": [
+                  "none",
+                  "underline",
+                  "line-through"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "FlexSeparator": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "margin": {
+                "type": "string"
+              },
+              "color": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "FlexFiller": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexComponent"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "flex": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ]
+      },
+      "FlexBoxBackground": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "linearGradient": "#/components/schemas/FlexBoxLinearGradient"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          }
+        }
+      },
+      "FlexBoxLinearGradient": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/FlexBoxBackground"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "angle": {
+                "type": "string"
+              },
+              "startColor": {
+                "type": "string"
+              },
+              "endColor": {
+                "type": "string"
+              },
+              "centerColor": {
+                "type": "string"
+              },
+              "centerPosition": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Action": {
+        "type": "object",
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "camera": "#/components/schemas/CameraAction",
+            "cameraRoll": "#/components/schemas/CameraRollAction",
+            "datetimepicker": "#/components/schemas/DatetimePickerAction",
+            "location": "#/components/schemas/LocationAction",
+            "message": "#/components/schemas/MessageAction",
+            "postback": "#/components/schemas/PostbackAction",
+            "richmenuswitch": "#/components/schemas/RichMenuSwitchAction",
+            "uri": "#/components/schemas/URIAction"
+          }
+        },
+        "description": "Action",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Type of action"
+          },
+          "label": {
+            "type": "string",
+            "description": "Label for the action."
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#action-objects"
+        }
+      },
+      "CameraAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          }
+        ]
+      },
+      "CameraRollAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          }
+        ]
+      },
+      "DatetimePickerAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 0
+              },
+              "mode": {
+                "type": "string",
+                "enum": [
+                  "date",
+                  "time",
+                  "datetime"
+                ]
+              },
+              "initial": {
+                "type": "string"
+              },
+              "max": {
+                "type": "string"
+              },
+              "min": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#datetime-picker-action"
+        }
+      },
+      "LocationAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          }
+        ]
+      },
+      "MessageAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "PostbackAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 0
+              },
+              "displayText": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "inputOption": {
+                "type": "string",
+                "enum": [
+                  "closeRichMenu",
+                  "openRichMenu",
+                  "openKeyboard",
+                  "openVoice"
+                ]
+              },
+              "fillInText": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "RichMenuSwitchAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "string",
+                "maxLength": 300,
+                "minLength": 0
+              },
+              "richMenuAliasId": {
+                "type": "string",
+                "maxLength": 32,
+                "minLength": 0
+              }
+            }
+          }
+        ]
+      },
+      "URIAction": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Action"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "uri": {
+                "type": "string",
+                "format": "uri"
+              },
+              "altUri": {
+                "$ref": "#/components/schemas/AltUri"
+              }
+            }
+          }
+        ]
+      },
+      "AltUri": {
+        "type": "object",
+        "properties": {
+          "desktop": {
+            "type": "string",
+            "maxLength": 1000,
+            "minLength": 0
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message containing information about the error."
+          },
+          "details": {
+            "type": "array",
+            "description": "An array of error details. If the array is empty, this property will not be included in the response.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            }
+          }
+        },
+        "externalDocs": {
+          "url": "https://developers.line.biz/en/reference/messaging-api/#error-responses"
+        }
+      },
+      "ErrorDetail": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Details of the error. Not included in the response under certain situations."
+          },
+          "property": {
+            "type": "string",
+            "description": "Location of where the error occurred. Returns the JSON field name or query parameter name of the request. Not included in the response under certain situations."
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "description": "Channel access token",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "messaging-api"
+    },
+    {
+      "name": "messaging-api-blob"
+    }
+  ]
+}
